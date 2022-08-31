@@ -51,26 +51,26 @@ window.addEventListener('load', () => {
      }
 
      controls.x = player.getX() + controls.velX * 0.1;
-     controls.y = player.getY() + controls.velY * 0.2;
+     controls.y = player.getY() + controls.velY * 0.1;
 
-     if (controls.x >= canvas.width) {
-      controls.x = canvas.width - player.h;
-      controls.velX = -10;
+     if (controls.x + player.w > canvas.width) {
+      controls.x = canvas.width - player.w;
+      controls.velX = -1;
      }
      if (controls.x <= 0) {
       controls.x = 0;
-      controls.velX = 10;
+      controls.velX = 1;
      }
      if (controls.y <= 0) {
       controls.y = 0;
-      controls.velY = 10;
+      controls.velY = 1;
      }
-     if (controls.y > canvas.height) {
-      controls.y = canvas.height - player.w;
-      controls.velY = -10;
+     if (controls.y + player.h > canvas.height) {
+      controls.y = canvas.height - player.h;
+      controls.velY = -1;
      }
+
      player.moveTo(controls.x, controls.y);
-    //  setTimeout(updateControls, 50);
   }
 
 

@@ -1,14 +1,16 @@
 window.addEventListener('load', () => {
   const canvas = document.getElementById('mainScreen');
   const ctx = canvas.getContext('2d');
-  canvas.width = 800;
-  canvas.height = 640;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.fillStyle = '#FFFFFF';
 
   const player = {
     x: 10,
     y: 10,
     w: 25,
     h: 25,
+    hp: 10,
     speed: 2,
     getX() {
       return this.x;
@@ -20,6 +22,10 @@ window.addEventListener('load', () => {
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(this.x, this.y, this.h, this.w);
     },
+    drawHp() {
+      ctx.fillStyle = '#FFFFFF99';
+      ctx.fillText(this.hp, this.x - 3, this.y - this.h / 2);
+    },
     moveTo(newX, newY) {
       this.x = newX;
       this.y = newY;
@@ -27,11 +33,11 @@ window.addEventListener('load', () => {
   }
   const controls = {
     keys: [],
-    x: 10,
-    y: 10,
+    x: 0,
+    y: 0,
     velX: 0,
     velY: 0,
-    maxspeed: 30,
+    maxspeed: 4,
   }
   document.body.addEventListener("keydown", (key) => { controls.keys[key.code] = true });
   document.body.addEventListener("keyup", (key) => { controls.keys[key.code] = false });
@@ -50,8 +56,11 @@ window.addEventListener('load', () => {
       if (controls.velX > -maxspeed) controls.velX -= 1;
      }
 
-     controls.x = player.getX() + controls.velX * 0.1;
-     controls.y = player.getY() + controls.velY * 0.1;
+     controls.velY = controls.velY * 0.93;
+     controls.velX = controls.velX * 0.93;
+
+     controls.x = controls.x + controls.velX;
+     controls.y = controls.y + controls.velY;
 
      if (controls.x + player.w > canvas.width) {
       controls.x = canvas.width - player.w;
@@ -73,13 +82,27 @@ window.addEventListener('load', () => {
      player.moveTo(controls.x, controls.y);
   }
 
+  const ui = () => {
+      ctx.font = '15px "Press Start 2P"';
+      ctx.fillText('Рабочее название: "Квадрат"', 30, 40);
+      ctx.fillText('Стата:', window.innerWidth - 100, 40);
+      ctx.fillText(`EXP: 1/10`, window.innerWidth - 150, 70);
+
+      ctx.fillText(`X: ${player.x.toFixed(2)} | Y: ${player.y.toFixed(2)}`, 30, 70);
+  }
 
   const update = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    updateControls();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    player.drawHp();
     player.draw();
+    updateControls();
     console.log(controls.keys['ArrowUp']);
   }
 
-  setInterval(() => update(), 10)
+  const gameCycle = setInterval(() => {
+    update();
+    ui();
+  }, 15);
+
+  gameCycle();
 })

@@ -17,7 +17,7 @@ window.addEventListener('load', () => {
       return this.y;
     },
     draw() {
-      ctx.fillStyle = '#FFFFFF20';
+      ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(this.x, this.y, this.h, this.w);
     },
     moveTo(newX, newY) {
@@ -27,38 +27,59 @@ window.addEventListener('load', () => {
   }
   const controls = {
     keys: [],
+    x: 10,
+    y: 10,
     velX: 0,
     velY: 0,
-    maxspeed: 1000
+    maxspeed: 30,
   }
   document.body.addEventListener("keydown", (key) => { controls.keys[key.code] = true });
   document.body.addEventListener("keyup", (key) => { controls.keys[key.code] = false });
   const updateControls = () => {
+    const maxspeed = controls.maxspeed;
      if (controls.keys['ArrowUp']) {
-      controls.velY -= 1
-      console.log(controls.velY)
+      if (controls.velY > -maxspeed) controls.velY -= 1;
      }
      if (controls.keys['ArrowDown']) {
-      controls.velY += 1
+      if (controls.velY < maxspeed) controls.velY += 1;
      }
      if (controls.keys['ArrowRight']) {
-      controls.velX += 1
+      if (controls.velX < maxspeed) controls.velX += 1;
      }
      if (controls.keys['ArrowLeft']) {
-      controls.velX -= 1
+      if (controls.velX > -maxspeed) controls.velX -= 1;
      }
 
-     player.moveTo(player.getX() + controls.velX * 0.17, player.getY() + controls.velY * 0.17);
+     controls.x = player.getX() + controls.velX * 0.1;
+     controls.y = player.getY() + controls.velY * 0.2;
 
+     if (controls.x >= canvas.width) {
+      controls.x = canvas.width - player.h;
+      controls.velX = -10;
+     }
+     if (controls.x <= 0) {
+      controls.x = 0;
+      controls.velX = 10;
+     }
+     if (controls.y <= 0) {
+      controls.y = 0;
+      controls.velY = 10;
+     }
+     if (controls.y > canvas.height) {
+      controls.y = canvas.height - player.w;
+      controls.velY = -10;
+     }
+     player.moveTo(controls.x, controls.y);
     //  setTimeout(updateControls, 50);
   }
 
 
   const update = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     updateControls();
     player.draw();
     console.log(controls.keys['ArrowUp']);
   }
 
-  setInterval(() => update(), 20)
+  setInterval(() => update(), 10)
 })

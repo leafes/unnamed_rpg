@@ -6,8 +6,8 @@ window.addEventListener('load', () => {
   ctx.fillStyle = '#FFFFFF';
 
   const player = {
-    x: 10,
-    y: 10,
+    x: canvas.width / 2,
+    y: canvas.width / 2,
     w: 25,
     h: 25,
     hp: 10,
@@ -33,10 +33,10 @@ window.addEventListener('load', () => {
   }
   const controls = {
     keys: [],
-    x: 0,
-    y: 0,
+    x: player.getX(),
+    y: player.getY() - 10,
     velX: 0,
-    velY: 0,
+    velY: 4,
     maxspeed: 4,
   }
   document.body.addEventListener("keydown", (key) => { controls.keys[key.code] = true });

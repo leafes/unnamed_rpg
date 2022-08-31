@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
 
   const player = {
     x: canvas.width / 2,
-    y: canvas.width / 2,
+    y: canvas.height / 2.5,
     w: 25,
     h: 25,
     hp: 10,
@@ -34,7 +34,7 @@ window.addEventListener('load', () => {
   const controls = {
     keys: [],
     x: player.getX(),
-    y: player.getY() - 10,
+    y: player.getY(),
     velX: 0,
     velY: 4,
     maxspeed: 4,
